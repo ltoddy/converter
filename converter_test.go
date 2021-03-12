@@ -5,14 +5,16 @@ import (
 )
 
 func TestNewMappingFromString(t *testing.T) {
-	convert := "from:user,to:other"
+	converts := []string{"from:user,to:other", "from:user,  to:other", "from:  user, to: other"}
 
-	mapping, err := NewMappingFromString(convert)
-	if err != nil {
-		t.Fatal()
-	}
+	for _, convert := range converts {
+		mapping, err := NewMappingFromString(convert)
+		if err != nil {
+			t.Fatal()
+		}
 
-	if mapping.from != "user" && mapping.to != "other" {
-		t.Fatal()
+		if mapping.from != "user" && mapping.to != "other" {
+			t.Fatal()
+		}
 	}
 }
