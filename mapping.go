@@ -2,12 +2,17 @@ package converter
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
 type mapping struct {
 	from string
 	to   string
+}
+
+func (m *mapping) String() string {
+	return fmt.Sprintf("mapping(from = %v, to = %v)", m.from, m.to)
 }
 
 var ErrInvalidateFormat = errors.New("invalid format")
