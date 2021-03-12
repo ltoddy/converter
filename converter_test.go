@@ -31,3 +31,19 @@ func TestConvert(t *testing.T) {
 		}
 	})
 }
+
+func BenchmarkConvert(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		user := NewUser("ltoddy", 23)
+		other := new(Other)
+
+		err := Convert(user, other)
+		if err != nil {
+			b.Fatal()
+		}
+
+		if other.Name != "ltoddy" && other.Age != 23 {
+			b.Fatal()
+		}
+	}
+}

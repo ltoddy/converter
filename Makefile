@@ -1,7 +1,10 @@
-.PHONY: clean fmt test view_test_coverage
+.PHONY: benchmark clean fmt test view_test_coverage
 
 SRC = $(shell find . -type f -name '*.go')
 PACKAGES = $(shell go list ./...)
+
+benchmark:
+	@go test -bench .
 
 clean:
 	@go clean -cache
