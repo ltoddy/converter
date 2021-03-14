@@ -1,52 +1,39 @@
 # converter
 
+Go语言结构体互相转换的库
+
+### 例子:
+
 ```go
 package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/ltoddy/converter"
 )
 
 type User struct {
-	Name string
+	Nickname string `convert:"field:Name"`
 	Age  int
 }
 
-func NewUser(name string, age int) *User {
-	return &User{name, age}
-}
-
-type Other struct {
-	Name string `convert:"from:Name,to:Name"`
-	Age  int    `convert:"from:Age,to:Age"`
+type Person struct {
+	Name string
+	Old  int `convert:"from:Age"`
 }
 
 func main() {
-	user := NewUser("ltoddy", 23)
-	other := new(Other)
+	u := &User{"ltoddy", 23}
+	p := new(Person)
+	converter.Convert(u, p)
 
-	err := converter.Convert(user, other)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Other(Name = %v, Age = %v)\n", other.Name, other.Age)
+	fmt.Printf("Person(Name = %v, Old = %v)\n", p.Name, p.Old)
+	// Person(Name = ltoddy, Old = 23)
 }
 ```
 
-### Benchmark
+TODO:
 
-> make benchmark
-
-```
-goos: darwin
-goarch: amd64
-pkg: github.com/ltoddy/converter
-cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
-BenchmarkConvert-12      1223701               966.2 ns/op
-PASS
-ok      github.com/ltoddy/converter     2.182s
-```
+- 嵌套结构体
+- array/slice
