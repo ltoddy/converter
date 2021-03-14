@@ -2,6 +2,8 @@
 
 Go语言结构体互相转换的库
 
+> go get github.com/ltoddy/converter
+
 ### 例子:
 
 ```go
