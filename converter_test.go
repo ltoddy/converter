@@ -2,48 +2,44 @@ package converter
 
 import "testing"
 
-type User struct {
-	Name string
-	Age  int
-}
-
-func NewUser(name string, age int) *User {
-	return &User{name, age}
-}
-
-type Other struct {
-	Name string `convert:"from:Name,to:Name"`
-	Age  int    `convert:"from:Age,to:Age"`
-}
-
 func TestConvert(t *testing.T) {
-	t.Run("test convert simple struct", func(t *testing.T) {
-		user := NewUser("ltoddy", 23)
-		other := new(Other)
-
-		err := Convert(user, other)
-		if err != nil {
-			t.Fatal()
+	t.Run("test simple struct without tags", func(t *testing.T) {
+		type user struct {
+			Name string
+			Age  int
 		}
 
-		if other.Name != "ltoddy" && other.Age != 23 {
+		type other struct {
+			Name string
+			Age  int
+		}
+
+		u := user{Name: "ltoddy", Age: 23}
+		o := new(other)
+
+		Convert(&u, o)
+		if o.Name != "ltoddy" || o.Age != 23 {
 			t.Fatal()
 		}
 	})
-}
 
-func BenchmarkConvert(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		user := NewUser("ltoddy", 23)
-		other := new(Other)
-
-		err := Convert(user, other)
-		if err != nil {
-			b.Fatal()
+	t.Run("test convert simple struct", func(t *testing.T) {
+		type user struct {
+			Name string
+			Age  int
 		}
 
-		if other.Name != "ltoddy" && other.Age != 23 {
-			b.Fatal()
+		type other struct {
+			Name string `convert:"from:Name,to:Name"`
+			Age  int    `convert:"from:Age,to:Age"`
 		}
-	}
+
+		u := &user{"ltoddy", 23}
+		o := new(other)
+
+		Convert(u, o)
+		if o.Name != "ltoddy" && o.Age != 23 {
+			t.Fatal()
+		}
+	})
 }
